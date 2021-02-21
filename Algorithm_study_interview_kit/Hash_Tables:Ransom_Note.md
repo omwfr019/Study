@@ -93,4 +93,50 @@ List, HashTable은 검색 속도가 오래 걸림 => Map의 입력/삭제 시간
 HashMap key에 note의 단어를 저장하고, value에 중복 체크를 위해 단어의 개수를 저장. <br/>
 note의 단어key가 magazine의 key에 있는지 검색. key가 검색되면 value의 개수를 빼서 중복 체크.
 
+<br/>
 
+#### 코드 정리
+* checkMagazine : 주어진 메소드. magazine의 요소로 note와 동일하게 만들 수 있는지 체크.
+* initMagazine : magazine을 HashMap으로 초기화 하는 메소드.
+* checkContainsAllWord : note의 모든 단어가 magazine에 포함되는지 판별. 하나라도 포함되지 않으면 No 반환.
+
+``` java
+static void checkMagazine(String[] magazine, String[] note) {
+    String result = "";
+    HashMap<String, Integer> convMagazine = new HashMap<String, Integer>();
+
+    convMagazine = initMagazine(magazine);
+    
+    result = checkContainsAllWord(convMagazine, note);
+    System.out.println(result);
+}
+
+static HashMap<String, Integer> initMagazine(String[] magazine) {
+    HashMap<String, Integer> convMagazine = new HashMap<String, Integer>();
+
+    for(String element : magazine) {
+        if (!convMagazine.containsKey(element)) {
+            convMagazine.put(element, 1);
+        } else {
+            convMagazine.put(element, convMagazine.get(element)+1);
+        }
+    }
+
+    return convMagazine;
+}
+
+static String checkContainsAllWord(HashMap<String, Integer> convMagazine, String[] note) {
+    for(String nWord : note) {
+        if(!convMagazine.containsKey(nWord)) {
+            return "No";
+        } else {
+            if(convMagazine.get(nWord) < 1) {
+                return "No";
+            } else {
+                convMagazine.put(nWord, convMagazine.get(nWord)-1);
+            }
+        }
+    }
+    return "Yes";
+}
+```
