@@ -47,7 +47,8 @@ static void checkMagazine(String[] magazine, String[] note) {
 }
 ```
 
-* 시간복잡도 : O(N^M)
+* 시간복잡도 : O(N*M) <br/>
+note 배열 사이즈 * magazine 배열 사이즈
 
 <br/>
 
@@ -85,7 +86,8 @@ static void checkMagazine(String[] magazine, String[] note) {
 }
 ```
 
-* 시간복잡도 : O(N+M)
+* 시간복잡도 : O(N+M) <br/>
+magazine 배열 사이즈 + note 배열 사이즈
 
 단어가 여러 개 존재할 수 있기 때문에 중복 체크 필요. 따라서 중복 저장을 허용하거나 각 단어의 개수 체크가 가능해야 함 => Set은 중복 저장 불가. <br/>
 List, HashTable은 검색 속도가 오래 걸림 => Map의 입력/삭제 시간복잡도는 O(1). <br/>
