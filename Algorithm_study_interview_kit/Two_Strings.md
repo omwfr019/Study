@@ -40,8 +40,8 @@ static String twoStrings(String s1, String s2) {
     return "NO";
 }
 ```
-* 시간복잡도 : O(N+M) <br/>
-   s1 배열 사이즈 + s2 배열 사이즈
+* 시간복잡도 : O(N) <br/>
+   N+M => s1 배열 사이즈 + s2 배열 사이즈
    
 
 Map => key-value 형태가 필요하지 않음 <br/>
@@ -51,9 +51,10 @@ Set의 검색(contains) 시간복잡도는 O(1)이고, 중복이 허용되지 �
 따라서 Set이 가장 적합. <br/>
 
 과정 1에서 생각해본 3가지 방법들 중 charAt() 메소드를 이용하는 것, char array로 변환 후 순회하기 중 어떤 방법이 성능에 유리할까? 를 검색한 결과 <br/>
-1. String 길이를 천만개로 하면 char array가, 백만개로 하면 charAt이 더 빠름.
-2. char 배열을 생성하여 반환하므로 처리속도가 더 느릴 수 있음.
-본 문제에선 1번 방법을 선택. <br/>
+   + String 길이를 천만개로 하면 char array가, 백만개로 하면 charAt이 더 빠름.
+   + char 배열을 생성하여 반환하므로 처리속도가 더 느릴 수 있음. <br/>
+
+본 문제에선 1.1번 방법을 선택.
 
 
 <br/>
@@ -62,6 +63,7 @@ Set의 검색(contains) 시간복잡도는 O(1)이고, 중복이 허용되지 �
 * twoStrings : 문제에서 주어진 메소드.
 * initStrToSet : string의 각 부분 문자char을 HashSet으로 추가하여 반환.
 * chkCommonSubString : str의 각 문자가 set에 포함되어 있으면 YES를 리턴. 포함되는 요소 없이 순회가 종료되면 NO를 리턴.
+
 ``` java
 static String twoStrings(String s1, String s2) {
    String result = "";
@@ -73,14 +75,15 @@ static String twoStrings(String s1, String s2) {
    System.out.println(result);
 }
 
-static HashSet<Character> initStrToSet(String s1) {
-   HashSet<Character> convS1 = new HashSet<Character>();
+static HashSet<Character> initStrToSet(String str) {
+   HashSet<Character> convStr = new HashSet<Character>();
    
-   for(int i=0; i<s1.length(); i++) {
-        convS1.add(s1.charAt(i));
+   for(int i=0; i<str.length(); i++) {
+        char subStr = str.charAt(i);
+        convStr.add(subStr);
    }
    
-   return convS1;
+   return convStr;
 }
 
 static String chkCommonSubString(HashSet<Character> set, String str) {
