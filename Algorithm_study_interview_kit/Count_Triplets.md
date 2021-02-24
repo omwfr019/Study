@@ -45,13 +45,16 @@ static long countTriplets(List<Long> arr, long r) {
   int n = 1;
   while(Math.pow(r, n+1) <= max) {
       long leftKey = (long)Math.pow(r, n-1);
-      long leftValue = list.containsKey(leftKey) == false ? 0 : list.get(leftKey);
+      //long leftValue = list.containsKey(leftKey) == false ? 0 : list.get(leftKey);
+      long leftValue = list.getOrDefault(leftKey, 0L);
       
       long centerKey = (long)Math.pow(r, n);
-      long centerValue = list.containsKey(centerKey) == false ? 0 : list.get(centerKey);
+      //long centerValue = list.containsKey(centerKey) == false ? 0 : list.get(centerKey);
+      long centerValue = list.getOrDefault(centerKey, 0L);
       
       long rightKey = (long)Math.pow(r, n+1);
-      long rightValue = list.containsKey(rightKey) == false ? 0 : list.get(rightKey);
+      //long rightValue = list.containsKey(rightKey) == false ? 0 : list.get(rightKey);
+      long rightValue = list.getOrDefault(rightKey, 0L);
       
       result += leftValue * centerValue * rightValue;
       n++;
