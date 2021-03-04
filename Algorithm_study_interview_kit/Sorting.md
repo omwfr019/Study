@@ -14,7 +14,7 @@ Sorting
 |힙 정렬|nlog2n|nlog2n|nlog2n|
 |병합정렬|nlog2n|nlog2n|nlog2n|
 
-<br/><br/>
+<br/>
 
 ---
 
@@ -45,14 +45,17 @@ Sorting
    단, 1번 과정이 1회 수행되면 제일 뒷자리의 수는 정렬이 완료(자리 고정)되었으므로 비교 필요 없음 ~> 1번 수행 횟수를 빼줌.
 3. 인접한 2개의 요소를 비교하여 크기가 순서대로 되어 있지 않으면 서로 교환
 
+<br/>
+
 만약, 중간에 정렬이 완료되더라도 버블 정렬은 나머지 모든 원소를 비교함. <br/>
 따라서 정렬이 끝났을 경우 다음 과정(비교)을 중단하면, 비교 횟수를 줄여 시간복잡도 개선 가능. <br/>
 => n회전일 때 swap이 이루어졌는지 체크하고, swap이 이루어지지 않았으면 이미 정렬이 완료되었다고 판단. <br/>
 
 ``` java
 void bubbleSort(int[] arr) {
-  for(int i=0;  i<arr.length-1; i++) {
+  for(int i=0; i<arr.length-1; i++) {
     boolean chkSwap = false; // 시간복잡도 개선
+    
     for(int j=1; j<arr.length-i; j++) {
       if(arr[j] < arr[j-1]) {
         int temp = arr[j-1];
@@ -71,8 +74,7 @@ void bubbleSort(int[] arr) {
 
 ### 분할 정복 알고리즘
 1. 분할
-   + 문제를 작은 단위로 나눔
-   + 내용은 동일. 크기만 작아짐
+   + 문제를 작은 단위로 나눔 (내용은 동일. 크기만 작아짐)
 2. 정복
    + 각각의 작은 문제를 해결
 3. 합병
@@ -83,12 +85,12 @@ void bubbleSort(int[] arr) {
 ## Meege Sort (합병 정렬)
 
 * 분할 정복 알고리즘 사용
-* recursion 사용
+* recursion 이용하여 구현
 * 배열을 절반으로 나눔 -> 각각을 정렬 -> 두 배열을 합침
 * 배열을 계속 반으로 나눔 ~> 결국 하나의 원소를 갖게됨 => 이때 각각은 정렬된 리스트 <br/>
   위 상태를 다시 merge
 * 두 배열을 합칠 추가 배열 필요
-* 시간복잡도 : O(nlogn)
+* 시간복잡도 : O(nlog2(n))
   + n개 데이터를 정렬하는 시간 = T(n) <br/>
     n을 반으로 나누어 정렬하는 시간 = T(n/2) <br/>
     => 2 * (n/2) = n
@@ -96,11 +98,49 @@ void bubbleSort(int[] arr) {
     길이가 n인 배열을 길이가 1인 각각의 리스트로 나누면, 트리의 레벨은 logn <br/>
     분할 과정은 매번 반씩 감소하므로 밑이 2인 logn만큼 반복 <br/>
     => logn
-  + 비교 연산의 총 횟수= n * logn
+  + 비교 연산의 총 횟수= n * log2n
 
-1. 배열을 반으로 나눔 (리스트의 길이가 1이 될 때까지 나눔) => 분할
-  1.1. 중간 지점을 구함
+1. 배열을 반으로 나눔 (리스트의 길이가 1이 될 때까지 순환) => 분할 <br/>
+  1.1. 중간 지점을 구함 <br/>
   1.2. 나누어진 두 배열이 같은 값을 가지면(하나의 원소만 남으면) 종료
 2. 각각의 배열을 정렬 => 정복
 3. 각 배열을 비교하여 가장 작은 값부터 차례대로 새로운 배열에 저장 => 합병
 
+``` java
+void partition(int ary[], int left, int right) {
+  if(left == right) return;
+  
+  int mid = (left + right) / 2;
+  partition(left, mid);
+  partition(mid+1, right);
+}
+
+void merge(int ary[], int left, int right) {
+  int idxL, idxR, idxN;
+  int mid = (left + right) / 2;
+  idxL = left;
+  idxR = right;
+  idxK = left;
+  
+}
+
+```
+
+<br/>
+
+## Quick Sort (퀵 정렬)
+
+: 하나의 리스트를 피벗pivot을 기준으로 분할하고, 분할된 부분 리스트를 정렬하고 다시 합침.
+
+* 분할 정복 알고리즘 사용
+* 불안정 정렬. 수행 속도 매우 빠름
+* 합병 정렬과 달리 리스트를 비균등하게 분할
+
+1. 리스트 안에서 요소 선택 (피벗pivot)
+2. 피벗을 기준으로 피벗보다 작은 요소들은 피벗의 왼쪽으로, 큰 요소들은 피벗의 오른쪽으로 옮김
+3. 피벗을 제외한 왼쪽/오른쪽 리스트 정렬
+4. 위 과정을 부분 리스트들이 분할 불가능할 때가지 반복
+
+``` java
+
+```
