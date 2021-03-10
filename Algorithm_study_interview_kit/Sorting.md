@@ -86,42 +86,80 @@ void bubbleSort(int[] arr) {
 
 * 분할 정복 알고리즘 사용
 * recursion 이용하여 구현
-* 배열을 절반으로 나눔 -> 각각을 정렬 -> 두 배열을 합침
 * 배열을 계속 반으로 나눔 ~> 결국 하나의 원소를 갖게됨 => 이때 각각은 정렬된 리스트 <br/>
   위 상태를 다시 merge
 * 두 배열을 합칠 추가 배열 필요
-* 시간복잡도 : O(nlog2(n))
-  + n개 데이터를 정렬하는 시간 = T(n) <br/>
-    n을 반으로 나누어 정렬하는 시간 = T(n/2) <br/>
-    => 2 * (n/2) = n
-  + 나누어진 배열을 병합할 때의 시간은 n을 넘지 않음 <br/>
-    길이가 n인 배열을 길이가 1인 각각의 리스트로 나누면, 트리의 레벨은 logn <br/>
-    분할 과정은 매번 반씩 감소하므로 밑이 2인 logn만큼 반복 <br/>
-    => logn
-  + 비교 연산의 총 횟수= n * log2n
+
+#### 시간복잡도 : O(nlog2(n))
+* 분할 단계 : 비교 연산, 이동 연산이 수행되지 않음 <br/>
+  합병 단계
+  + 크기 n/2인 부분 배열 1쌍 * n번 비교
+  + 크기 n/4인 부분 배열 2쌍 * (n/2)번 비교
+  + ...
+  + 크기 1인 부분 배열 (n/2)쌍 * 2번 비교
+* n개 데이터를 정렬하는 시간 = T(n) <br/>
+  n을 반으로 나누어 정렬하는 시간 = T(n/2) <br/>
+  => 2 * (n/2) = n
+* 나누어진 배열을 병합할 때의 시간은 n을 넘지 않음 <br/>
+  길이가 n인 배열을 길이가 1인 각각의 리스트로 나누면, 트리의 레벨은 logn <br/>
+  분할 과정은 매번 반씩 감소하므로 밑이 2인 logn만큼 반복 <br/>
+  => logn
+* 비교 연산의 총 횟수= n * log2(n)
+
+<br/>
 
 1. 배열을 반으로 나눔 (리스트의 길이가 1이 될 때까지 순환) => 분할 <br/>
-  1.1. 중간 지점을 구함 <br/>
+  1.1. 중간 인덱스를 구함 <br/>
   1.2. 나누어진 두 배열이 같은 값을 가지면(하나의 원소만 남으면) 종료
 2. 각각의 배열을 정렬 => 정복
 3. 각 배열을 비교하여 가장 작은 값부터 차례대로 새로운 배열에 저장 => 합병
 
 ``` java
-void partition(int ary[], int left, int right) {
-  if(left == right) return;
+void partition(int ary[], int start, int end) {
+  if(start == end) return;
   
-  int mid = (left + right) / 2;
-  partition(left, mid);
-  partition(mid+1, right);
+  int mid = (start + end) / 2;
+  partition(start, mid);
+  partition(mid+1, end);
+  merge(ary, start, mid, end);
 }
 
-void merge(int ary[], int left, int right) {
-  int idxL, idxR, idxN;
-  int mid = (left + right) / 2;
-  idxL = left;
-  idxR = right;
-  idxK = left;
+void merge(int ary[], int start, int mid, int end) {
+  int temp[] = new int[ary.length];
+  int mid = (start + end) / 2;
+  int i = start;
+  int j = mid + 1;
+  int k = start;
   
+  while(i <= mid && j <= end) {
+    if(ary[i] < ary[j]) {
+      temp[k] = ary[i];
+      i++;
+    } else {
+      temp[k] = ary[j];
+      j++;
+    }
+    k++;
+    
+    // temp[k++] = ary[i] < ary[j] ? ary[i++] : ary[j++];
+  }
+  
+  if(i > mid) {
+    for(int n=j; n<=end; n++) {
+      temp[k] = ary[n];
+      k++;
+    }
+  }
+  else {
+    for(int n=i; n<=mid; n++) {
+      temp[k] = ary[n];
+      k++;
+    }
+  }
+  
+  for(int n=startl n<=end; n++) {
+    ary[n] = tmp[n];
+  }
 }
 
 ```
