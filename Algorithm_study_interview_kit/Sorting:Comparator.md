@@ -15,6 +15,8 @@ In short, when sorting in ascending order, a comparator function returns -1 if a
 Declare a Checker class that implements the comparator method as described. <br/>
 It should sort first descending by score, then ascending by name. The code stub reads the input, creates a list of Player objects, uses your method to sort the data, and prints it out properly. <br/>
 
+(https://www.hackerrank.com/challenges/ctci-comparator-sorting/problem)
+
 <br/>
 
 ## 설계
@@ -65,7 +67,9 @@ test case를 분석해보니 누락된 케이스가 있음. <br/>
     ex) 입력값 : a 5, aa 5
 
 <br/>
+
 글자수 비교하는 로직을 추가하여 글자수가 더 작은 Person을 큰 값으로 판단하여 반환 => 누락 케이스 1, 2 해결됨
+
 <br/>
 
 * 현재 로직 : 반복문 내에서 글자 비교 -> 두 비교대상이 동일한 것으로 판단 (0 반환) 
@@ -95,6 +99,83 @@ class Checker implements Comparator<Player> {
         if(nameA.length() > nameB.length()) return 1;
         else if(nameA.length() < nameB.length()) return -1;
         return 0;
+    }
+}
+```
+
+<br/>
+
+### 코드
+```java
+import java.util.*;
+
+class Player {
+	String name;
+	int score;
+
+	Player(String name, int score) {
+		this.name = name;
+		this.score = score;
+	}
+}
+
+class Checker implements Comparator<Player> {
+  	// complete this method
+	public int compare(Player a, Player b) {
+        int result = 0;
+        String nameA = a.name;
+        String nameB = b.name;
+        Integer scoreA = a.score;
+        Integer scoreB = b.score;
+        
+        result = compareScore(scoreA, scoreB);
+        if(result == 0) {
+            result = compareName(nameA, nameB);
+        }
+        
+        return result;
+    }
+    
+    public int compareScore(int scoreA, int scoreB) {
+        if(scoreA < scoreB) return 1;
+        else if(scoreA > scoreB) return -1;
+        return 0;
+    }
+    
+    public int compareName(String nameA, String nameB) {
+        int cnt = 0;
+        
+        while(cnt < nameA.length() && cnt < nameB.length()) {
+            if(nameA.charAt(cnt) > nameB.charAt(cnt)) return 1;
+            else if(nameA.charAt(cnt) < nameB.charAt(cnt)) return -1;
+            else cnt++;
+        }
+        
+        if(nameA.length() > nameB.length()) return 1;
+        else if(nameA.length() < nameB.length()) return -1;
+        return 0;
+    }
+}
+
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+
+        Player[] player = new Player[n];
+        Checker checker = new Checker();
+        
+        for(int i = 0; i < n; i++){
+            player[i] = new Player(scan.next(), scan.nextInt());
+        }
+        scan.close();
+
+        Arrays.sort(player, checker);
+        for(int i = 0; i < player.length; i++){
+            System.out.printf("%s %s\n", player[i].name, player[i].score);
+        }
     }
 }
 ```
