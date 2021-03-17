@@ -18,8 +18,6 @@ It should sort first descending by score, then ascending by name. The code stub 
 <br/>
 
 ## 설계
-
-### 구상 1
 1. a, b의 각 name, score를 저장
 2. 저장된 score를 비교하여 크거나 같으면 결과 반환
 3. (a, b의 score가 같으면) 각 name의 글자 비교 후 결과 반환
@@ -48,4 +46,55 @@ public int compare(Player a, Player b) {
 }
 ```
 
-=> 테스트 케이스 일부만 통과.
+<br/>
+=> 테스트 케이스 일부만 통과. <br/>
+test case를 분석해보니 누락된 케이스가 있음. <br/>
+
+* 현재까지 고려된 케이스
+  1. score 비동일 <br/>
+    ex) 입력값 : a 1, a 10
+  2. score 동일, name 글자 비동일, 글자수 동일 <br/>
+    ex) 입력값 : aa 5, ab 5
+  3. score 동일, name 글자 비동일, 글자수 비동일 (반복문 내에서 비교 결과 반환) <br/>
+    ex) 입력값 : abb 5, aab 5
+
+* 누락 케이스
+  1. score 동일, name 글자 비동일, 글자수 비동일 (반복문 내에서 비교 결과 반환되지 않음) <br/>
+    ex) 입력값 : aab 5, aabc 5
+  2. score 동일, name 글자 동일, 글자수 비동일 <br/>
+    ex) 입력값 : a 5, aa 5
+
+<br/>
+글자수 비교하는 로직을 추가하여 글자수가 더 작은 Person을 큰 값으로 판단하여 반환 => 누락 케이스 1, 2 해결됨
+
+<br/>
+* 현재 로직 : 반복문 내에서 글자 비교 -> 두 비교대상이 동일한 것으로 판단 (0 반환) 
+* 수정 로직 : 반복문 내에서 글자 비교 -> 글자수 비교 -> 두 비교대상이 동일한 것으로 판단 (0 반환) 
+
+<br/>
+
+```java
+class Checker implements Comparator<Player> {
+  	// complete this method
+	public int compare(Player a, Player b) {
+        String nameA = a.name;
+        String nameB = b.name;
+        Integer scoreA = a.score;
+        Integer scoreB = b.score;
+        
+        if(scoreA < scoreB) return 1;
+        else if(scoreA > scoreB) return -1;
+        
+        int cnt = 0;
+        while(cnt < nameA.length() && cnt < nameB.length()) {
+            if(nameA.charAt(cnt) > nameB.charAt(cnt)) return 1;
+            else if(nameA.charAt(cnt) < nameB.charAt(cnt)) return -1;
+            else cnt++;
+        }
+        
+        if(nameA.length() > nameB.length()) return 1;
+        else if(nameA.length() < nameB.length()) return -1;
+        return 0;
+    }
+}
+```
